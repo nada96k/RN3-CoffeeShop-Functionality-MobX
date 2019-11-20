@@ -23,6 +23,7 @@ class CartStore {
   checkoutCart = () => {
     this.items.length = 0;
     this.counter = 0;
+    alert("Thank you for using our app :D !");
   };
 
   sumCart = currentItem => {
