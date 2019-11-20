@@ -1,15 +1,20 @@
 import React from "react";
 import { withNavigation } from "react-navigation";
-import { Icon } from "native-base";
+import { Icon, Text } from "native-base";
+import { observer } from "mobx-react";
+import cartStore from "../../store/cartStore";
 
 const CartButton = ({ navigation }) => {
   return (
-    <Icon
-      name="shoppingcart"
-      type="AntDesign"
-      onPress={() => navigation.navigate("CartScreen")}
-    />
+    <Text>
+      {cartStore.counter}
+      <Icon
+        name="shoppingcart"
+        type="AntDesign"
+        onPress={() => navigation.navigate("CartScreen")}
+      />
+    </Text>
   );
 };
 
-export default withNavigation(CartButton);
+export default withNavigation(observer(CartButton));

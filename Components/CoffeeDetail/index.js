@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import NumericInput from "react-native-numeric-input";
+import { observer } from "mobx-react";
 
 // NativeBase Components
 import {
@@ -20,14 +21,17 @@ import {
 import styles from "./styles";
 
 //List
-import coffeeshops from "../CoffeeList/list";
+import coffeeStore from "../../store/coffeeStore";
 import CartButton from "../Buttons/CartButton";
+
+//Store
+import cartStore from "../../store/cartStore";
 
 class CoffeeDetail extends Component {
   state = {
-    drink: "Cappuccino",
-    option: "Small",
-    quantity: 1
+    drink: "",
+    option: "",
+    quantity: 0
   };
 
   changeDrink = value =>
@@ -42,7 +46,7 @@ class CoffeeDetail extends Component {
 
   render() {
     const coffeeshopID = this.props.navigation.getParam("coffeeshopID");
-    const coffeeshop = coffeeshops.find(
+    const coffeeshop = coffeeStore.coffeeShops.find(
       coffeeshop => coffeeshopID === coffeeshop.id
     );
     return (
@@ -58,7 +62,7 @@ class CoffeeDetail extends Component {
               </Left>
               <Body />
               <Right>
-                <Thumbnail bordered source={coffeeshop.img} />
+                <Thumbnail bordered source={{ uri: coffeeshop.img }} />
               </Right>
             </CardItem>
             <CardItem>
@@ -69,6 +73,7 @@ class CoffeeDetail extends Component {
                   style={styles.picker}
                   onValueChange={this.changeDrink}
                   placeholder="Choose Drink"
+                  selectedValue={this.state.drink}
                 >
                   <Picker.Item label="Cappuccino" value="Cappuccino" />
                   <Picker.Item label="Latte" value="Latte" />
@@ -82,6 +87,7 @@ class CoffeeDetail extends Component {
                   style={styles.picker}
                   onValueChange={this.changeOption}
                   placeholder="Choose Option"
+                  selectedValue={this.state.option}
                 >
                   <Picker.Item label="Small" value="Small" />
                   <Picker.Item label="Medium" value="Medium" />
@@ -94,12 +100,19 @@ class CoffeeDetail extends Component {
                 <NumericInput
                   value={this.state.value}
                   onChange={quantity => this.setState({ quantity })}
-                  initValue={1}
+                  initValue={this.state.quantity}
                 />
               </Body>
 
               <Right>
-                <Button full style={styles.addButton}>
+                <Button
+                  full
+                  style={styles.addButton}
+                  onPress={() => {
+                    cartStore.addItemToCart(this.state);
+                    cartStore.sumCart(this.state);
+                  }}
+                >
                   <Text>Add</Text>
                 </Button>
               </Right>
@@ -116,4 +129,4 @@ CoffeeDetail.navigationOptions = ({ navigation }) => ({
   headerRight: <CartButton />
 });
 
-export default CoffeeDetail;
+export default observer(CoffeeDetail);

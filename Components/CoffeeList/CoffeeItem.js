@@ -16,7 +16,10 @@ const CoffeeItem = ({ coffeeshop, navigation }) => {
     });
 
   return (
-    <ImageBackground source={coffeeshop.background} style={styles.background}>
+    <ImageBackground
+      source={{ uri: coffeeshop.background }}
+      style={styles.background}
+    >
       <View style={styles.overlay} />
       <ListItem button onPress={handlePress} style={styles.listitem}>
         <Card style={styles.transparent}>
@@ -24,7 +27,7 @@ const CoffeeItem = ({ coffeeshop, navigation }) => {
             <Left>
               <Thumbnail
                 bordered
-                source={coffeeshop.img}
+                source={{ uri: coffeeshop.img }}
                 style={styles.thumbnail}
               />
               <Text style={styles.text}>{coffeeshop.name}</Text>
